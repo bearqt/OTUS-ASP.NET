@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PromoCodeFactory.Core.Abstractions.Repositories;
@@ -25,6 +26,17 @@ namespace PromoCodeFactory.WebHost
                 new InMemoryRepository<Preference>(FakeDataFactory.Preferences));
             services.AddScoped(typeof(IRepository<Customer>), (x) =>
                 new InMemoryRepository<Customer>(FakeDataFactory.Customers));
+
+            services.AddDbContext<EfDbContext>();
+
+            services.AddScoped(typeof(IGenericRepository<Employee>), typeof(GenericRepository<Employee>));
+            services.AddScoped(typeof(IGenericRepository<Role>), typeof(GenericRepository<Role>));
+            services.AddScoped(typeof(IGenericRepository<Preference>), typeof(GenericRepository<Preference>));
+            services.AddScoped(typeof(IGenericRepository<Customer>), typeof(GenericRepository<Customer>));
+            services.AddScoped(typeof(IGenericRepository<CustomerPreference>), typeof(GenericRepository<CustomerPreference>));
+
+            services.AddScoped(typeof(IUnitOfWork), typeof(CustomerPreferenceUnitOfWork));
+
 
             services.AddOpenApiDocument(options =>
             {

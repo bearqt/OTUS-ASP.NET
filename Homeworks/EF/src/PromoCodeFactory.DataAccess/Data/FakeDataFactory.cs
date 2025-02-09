@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Resource;
 using PromoCodeFactory.Core.Domain.Administration;
 using PromoCodeFactory.Core.Domain.PromoCodeManagement;
 
@@ -16,7 +17,7 @@ namespace PromoCodeFactory.DataAccess.Data
                 Email = "owner@somemail.ru",
                 FirstName = "Иван",
                 LastName = "Сергеев",
-                Role = Roles.FirstOrDefault(x => x.Name == "Admin"),
+                RoleId = Roles.FirstOrDefault(x => x.Name == "Admin").Id,
                 AppliedPromocodesCount = 5
             },
             new Employee()
@@ -25,7 +26,7 @@ namespace PromoCodeFactory.DataAccess.Data
                 Email = "andreev@somemail.ru",
                 FirstName = "Петр",
                 LastName = "Андреев",
-                Role = Roles.FirstOrDefault(x => x.Name == "PartnerManager"),
+                RoleId = Roles.FirstOrDefault(x => x.Name == "PartnerManager").Id,
                 AppliedPromocodesCount = 10
             },
         };
@@ -77,12 +78,33 @@ namespace PromoCodeFactory.DataAccess.Data
                         Id = customerId,
                         Email = "ivan_sergeev@mail.ru",
                         FirstName = "Иван",
-                        LastName = "Петров",
-                        //TODO: Добавить предзаполненный список предпочтений
+                        LastName = "Петров"
                     }
                 };
 
                 return customers;
+            }
+        }
+
+        public static IEnumerable<CustomerPreference> CustomerPreferences
+        {
+            get
+            {
+                var customerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0");
+
+                var preferences = new List<CustomerPreference>
+                {
+                    new CustomerPreference {
+                        CustomerId = customerId,
+                        PreferenceId = Preferences.First(x => x.Name == "Театр").Id
+                    },
+                    new CustomerPreference {
+                        CustomerId = customerId,
+                        PreferenceId = Preferences.First(x => x.Name == "Семья").Id
+                    },
+
+                };
+                return preferences;
             }
         }
     }
